@@ -4,6 +4,11 @@
  */
 package edu.ijse.mvc.view;
 
+import edu.ijse.mvc.dto.CustomerDto;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author anjana
@@ -15,6 +20,7 @@ public class CustomerView extends javax.swing.JFrame {
      */
     public CustomerView() {
         initComponents();
+        loadTable();
     }
 
     /**
@@ -41,7 +47,7 @@ public class CustomerView extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblCistomer = new javax.swing.JTable();
+        tblCustomer = new javax.swing.JTable();
         txtName = new javax.swing.JTextField();
         lblName = new javax.swing.JLabel();
         txtSalary = new javax.swing.JTextField();
@@ -93,11 +99,21 @@ public class CustomerView extends javax.swing.JFrame {
 
         btnUpdate.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         btnUpdate.setText("Update Customer");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnDelete.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         btnDelete.setText("Delete Customer");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
-        tblCistomer.setModel(new javax.swing.table.DefaultTableModel(
+        tblCustomer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -108,7 +124,12 @@ public class CustomerView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblCistomer);
+        tblCustomer.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCustomerMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblCustomer);
 
         txtName.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
 
@@ -245,8 +266,20 @@ public class CustomerView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-       
+       saveCustomer();
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        updateCustomer();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        deleteCustomer();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tblCustomerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomerMouseClicked
+        searchCustomer();
+    }//GEN-LAST:event_tblCustomerMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
@@ -263,7 +296,7 @@ public class CustomerView extends javax.swing.JFrame {
     private javax.swing.JLabel lblProvince;
     private javax.swing.JLabel lblSalary;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JTable tblCistomer;
+    private javax.swing.JTable tblCustomer;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtCity;
     private javax.swing.JTextField txtDob;
@@ -274,4 +307,114 @@ public class CustomerView extends javax.swing.JFrame {
     private javax.swing.JTextField txtSalary;
     private javax.swing.JTextField txtTitle;
     // End of variables declaration//GEN-END:variables
+    private void loadTable(){
+        String [] columns = {"Customer Id", "Customer Name", "Date of Birth", "Salary", "Address", "Postal Code"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tblCustomer.setModel(dtm);
+        
+        // Load Data
+        try {
+            ArrayList<CustomerDto> customerDtos = null;
+            if(customerDtos != null){
+                for (CustomerDto customerDto : customerDtos) {
+                    Object[] rowData = {customerDto.getCustId(),
+                    customerDto.getTitle() + ". " + customerDto.getName(),
+                    customerDto.getDob(), customerDto.getSalary(),
+                    customerDto.getAddress()+", " + customerDto.getCity() + ", " + customerDto.getProvince(),
+                    customerDto.getPostalCode()};
+                    
+                    dtm.addRow(rowData);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error at Customer Loading");
+        }
+    }
+
+    private void saveCustomer() {
+        CustomerDto dto = new CustomerDto(txtId.getText(), 
+                txtTitle.getText(), txtName.getText(), txtDob.getText(),
+                Double.parseDouble(txtSalary.getText()), txtAddress.getText(),
+                txtCity.getText(), txtProvince.getText(), txtPostalCode.getText());
+        
+        try {
+            String resp = null;
+            JOptionPane.showMessageDialog(this, resp);
+            loadTable();
+            clearForm();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Customer Save Fail");
+        }
+    }
+
+    private void clearForm() {
+        txtId.setText("");
+        txtTitle.setText("");
+        txtName.setText("");
+        txtDob.setText("");
+        txtSalary.setText("");
+        txtAddress.setText("");
+        txtCity.setText("");
+        txtProvince.setText("");
+        txtPostalCode.setText("");
+    }
+
+    private void updateCustomer() {
+        CustomerDto dto = new CustomerDto(txtId.getText(), 
+                txtTitle.getText(), txtName.getText(), txtDob.getText(),
+                Double.parseDouble(txtSalary.getText()), txtAddress.getText(),
+                txtCity.getText(), txtProvince.getText(), txtPostalCode.getText());
+        
+        try {
+            String resp = null;
+            JOptionPane.showMessageDialog(this, resp);
+            loadTable();
+            clearForm();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Customer Update Fail");
+        }
+    }
+
+    private void deleteCustomer() {
+        try {
+            String resp = null;
+            JOptionPane.showMessageDialog(this, resp);
+            loadTable();
+            clearForm();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Customer Delete Fail");
+        }
+    }
+
+    private void searchCustomer() {
+        String custId = (String) tblCustomer.getValueAt(tblCustomer.getSelectedRow(), 0);
+        try {
+            CustomerDto customerDto = null;
+            if(customerDto != null){
+                txtId.setText(customerDto.getCustId());
+                txtTitle.setText(customerDto.getTitle());
+                txtName.setText(customerDto.getName());
+                txtDob.setText(customerDto.getDob());
+                txtSalary.setText(Double.toString(customerDto.getSalary()));
+                txtAddress.setText(customerDto.getAddress());
+                txtCity.setText(customerDto.getCity());
+                txtProvince.setText(customerDto.getProvince());
+                txtPostalCode.setText(customerDto.getPostalCode());
+            } else {
+                JOptionPane.showMessageDialog(this, "Customer Not Found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Customer Search Fail");
+        }
+    }
 }
