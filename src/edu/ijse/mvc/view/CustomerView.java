@@ -4,6 +4,7 @@
  */
 package edu.ijse.mvc.view;
 
+import edu.ijse.mvc.controller.CustomerController;
 import edu.ijse.mvc.dto.CustomerDto;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -14,6 +15,8 @@ import javax.swing.table.DefaultTableModel;
  * @author anjana
  */
 public class CustomerView extends javax.swing.JFrame {
+    
+    private CustomerController customerController = new CustomerController();
 
     /**
      * Creates new form CustomerView
@@ -319,7 +322,7 @@ public class CustomerView extends javax.swing.JFrame {
         
         // Load Data
         try {
-            ArrayList<CustomerDto> customerDtos = null;
+            ArrayList<CustomerDto> customerDtos = customerController.findAllCustomer();
             if(customerDtos != null){
                 for (CustomerDto customerDto : customerDtos) {
                     Object[] rowData = {customerDto.getCustId(),
@@ -344,7 +347,7 @@ public class CustomerView extends javax.swing.JFrame {
                 txtCity.getText(), txtProvince.getText(), txtPostalCode.getText());
         
         try {
-            String resp = null;
+            String resp = customerController.saveCustomer(dto);
             JOptionPane.showMessageDialog(this, resp);
             loadTable();
             clearForm();
@@ -373,7 +376,7 @@ public class CustomerView extends javax.swing.JFrame {
                 txtCity.getText(), txtProvince.getText(), txtPostalCode.getText());
         
         try {
-            String resp = null;
+            String resp = customerController.updateCustomer(dto);
             JOptionPane.showMessageDialog(this, resp);
             loadTable();
             clearForm();
@@ -385,7 +388,7 @@ public class CustomerView extends javax.swing.JFrame {
 
     private void deleteCustomer() {
         try {
-            String resp = null;
+            String resp = customerController.deleteCustomer(txtId.getText());
             JOptionPane.showMessageDialog(this, resp);
             loadTable();
             clearForm();
@@ -398,7 +401,7 @@ public class CustomerView extends javax.swing.JFrame {
     private void searchCustomer() {
         String custId = (String) tblCustomer.getValueAt(tblCustomer.getSelectedRow(), 0);
         try {
-            CustomerDto customerDto = null;
+            CustomerDto customerDto = customerController.searchCustomer(custId);
             if(customerDto != null){
                 txtId.setText(customerDto.getCustId());
                 txtTitle.setText(customerDto.getTitle());
