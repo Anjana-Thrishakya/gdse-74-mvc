@@ -16,12 +16,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CustomerView extends javax.swing.JFrame {
     
-    private CustomerController customerController = new CustomerController();
+    private CustomerController customerController;
 
     /**
      * Creates new form CustomerView
      */
-    public CustomerView() {
+    public CustomerView() throws Exception{
+        customerController = new CustomerController();
         initComponents();
         loadTable();
     }

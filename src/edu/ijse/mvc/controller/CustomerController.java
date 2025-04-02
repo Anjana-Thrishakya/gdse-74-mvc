@@ -5,6 +5,7 @@
 package edu.ijse.mvc.controller;
 
 import edu.ijse.mvc.dto.CustomerDto;
+import edu.ijse.mvc.model.CustomerModel;
 import java.util.ArrayList;
 
 /**
@@ -12,28 +13,35 @@ import java.util.ArrayList;
  * @author anjana
  */
 public class CustomerController {
+    
+    private final CustomerModel customerModel;
+    
+    public CustomerController() throws Exception{
+        this.customerModel = new CustomerModel();
+    }
+    
     public String saveCustomer(CustomerDto dto) throws Exception{
-        String resp = null;
+        String resp = customerModel.saveCustomer(dto);
         return resp;
     }
     
     public String updateCustomer(CustomerDto dto) throws Exception{
-        String resp = null;
+        String resp = customerModel.updateCustomer(dto);
         return resp;
     }
     
     public String deleteCustomer(String customerId) throws Exception{
-        String resp = null;
+        String resp = customerModel.deleteCustomer(customerId);
         return resp;
     }
     
     public CustomerDto searchCustomer(String customerId) throws Exception{
-        CustomerDto dto = null;
+        CustomerDto dto = customerModel.searchCustomer(customerId);
         return dto;
     }
     
     public ArrayList<CustomerDto> findAllCustomer() throws Exception{
-        ArrayList<CustomerDto> dtos = null;
+        ArrayList<CustomerDto> dtos = customerModel.getAllCustomer();
         return dtos;
     }
 }
