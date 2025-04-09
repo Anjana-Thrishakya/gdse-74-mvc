@@ -6,6 +6,7 @@ package edu.ijse.mvc.view;
 
 import edu.ijse.mvc.controller.CustomerController;
 import edu.ijse.mvc.controller.ItemController;
+import edu.ijse.mvc.controller.OrderController;
 import edu.ijse.mvc.dto.CustomerDto;
 import edu.ijse.mvc.dto.ItemDto;
 import edu.ijse.mvc.dto.OrderDetailDto;
@@ -24,6 +25,7 @@ public class OrderView extends javax.swing.JFrame {
     
     private CustomerController customerController;
     private ItemController itemController;
+    private OrderController orderController;
     
     private ArrayList<OrderDetailDto> orderDetailDtos = new ArrayList<>();
 
@@ -33,6 +35,7 @@ public class OrderView extends javax.swing.JFrame {
     public OrderView() throws Exception {
         customerController = new CustomerController();
         itemController = new ItemController();
+        orderController = new OrderController();
         initComponents();
         loadTable();
     }
@@ -354,7 +357,7 @@ public class OrderView extends javax.swing.JFrame {
         orderDto.setOrderDate(dateString);
         
         try {
-            String resp = null;
+            String resp = orderController.placeOrder(orderDto, orderDetailDtos);
             JOptionPane.showMessageDialog(this, resp);
             clearForm();
         } catch (Exception e) {
@@ -367,6 +370,7 @@ public class OrderView extends javax.swing.JFrame {
         txtOrderId.setText("");
         txtCustId.setText("");
         lblCustData.setText("");
+        loadTable();
         this.orderDetailDtos = new ArrayList<>();
     }
 }
