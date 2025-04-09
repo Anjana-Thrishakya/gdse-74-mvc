@@ -8,6 +8,11 @@ import edu.ijse.mvc.controller.CustomerController;
 import edu.ijse.mvc.controller.ItemController;
 import edu.ijse.mvc.dto.CustomerDto;
 import edu.ijse.mvc.dto.ItemDto;
+import edu.ijse.mvc.dto.OrderDetailDto;
+import edu.ijse.mvc.dto.OrderDto;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -19,6 +24,8 @@ public class OrderView extends javax.swing.JFrame {
     
     private CustomerController customerController;
     private ItemController itemController;
+    
+    private ArrayList<OrderDetailDto> orderDetailDtos = new ArrayList<>();
 
     /**
      * Creates new form OrderView
@@ -238,7 +245,7 @@ public class OrderView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddToTableActionPerformed
 
     private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
-        // TODO add your handling code here:
+        placeOrder();
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
     private void btnCustSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustSearchActionPerformed
@@ -317,6 +324,13 @@ public class OrderView extends javax.swing.JFrame {
         Object[] rowData = {txtItemId.getText(), txtQty.getText(), txtDiscount.getText()};
         dtm.addRow(rowData);
         
+        OrderDetailDto dto = new OrderDetailDto(null, 
+                txtItemId.getText(), 
+                Integer.parseInt(txtQty.getText()), 
+                Integer.parseInt(txtDiscount.getText()));
+        
+        orderDetailDtos.add(dto);
+        
         clearItem();
     }
 
@@ -326,5 +340,33 @@ public class OrderView extends javax.swing.JFrame {
         txtDiscount.setText("");
         lblItemData.setText("");
        
+    }
+
+    private void placeOrder() {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setCustId(txtCustId.getText());
+        orderDto.setOrderId(txtOrderId.getText());
+        
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = sdf.format(date);
+        
+        orderDto.setOrderDate(dateString);
+        
+        try {
+            String resp = null;
+            JOptionPane.showMessageDialog(this, resp);
+            clearForm();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void clearForm() {
+        txtOrderId.setText("");
+        txtCustId.setText("");
+        lblCustData.setText("");
+        this.orderDetailDtos = new ArrayList<>();
     }
 }
