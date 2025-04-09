@@ -316,5 +316,15 @@ public class OrderView extends javax.swing.JFrame {
         DefaultTableModel dtm = (DefaultTableModel) tblOrderData.getModel();
         Object[] rowData = {txtItemId.getText(), txtQty.getText(), txtDiscount.getText()};
         dtm.addRow(rowData);
+        
+        clearItem();
+    }
+
+    private void clearItem() {
+        txtItemId.setText("");
+        txtQty.setText("");
+        txtDiscount.setText("");
+        lblItemData.setText("");
+       
     }
 }
